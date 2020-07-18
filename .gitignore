@@ -6,3 +6,4 @@ webpack/README.md
 .gradle/
 package-lock.json
 .node-version
+public/*

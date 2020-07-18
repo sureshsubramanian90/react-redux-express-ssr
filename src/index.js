@@ -2,6 +2,7 @@ import Express from 'express';
 import React from 'react';
 import { Provider } from 'react-redux';
 import { renderToString } from 'react-dom/server';
+import serialize from 'serialize-javascript';
 import match from 'react-router/lib/match';
 import App from './containers/App';
 import RootReducer from './reducers';
@@ -59,6 +60,14 @@ function renderFullPage(html, preloadedState) {
       </head>
       <body>
         <div id="root">${html}</div>
+        <script>
+          // WARNING: See the following for security issues around embedding JSON in HTML:
+          // https://redux.js.org/recipes/server-rendering/#security-considerations
+          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(
+            /</g,
+            '\\u003c'
+          )}
+        </script>
         <script src="/bundle.js"></script>
       </body>
     </html>
