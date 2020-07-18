@@ -7,7 +7,6 @@ import reducerSagaRegistry from './ReducerSagaRegistry';
 let store = {};
 let sagaMiddleware;
 const storeFactory = (reducers, initialState, rootSaga, externalMiddlewares) => {
-    console.log('jgjhgjkhgik');
     sagaMiddleware = createSagaMiddleware();
     let middleware = [sagaMiddleware, reducerRegistryMiddleware];
     if (externalMiddlewares) {
