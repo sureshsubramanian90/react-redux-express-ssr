@@ -5,7 +5,7 @@ export default function HomeReducer(state = {}, action = {}) {
   switch (action.type) {
     case GET_HOME_PAGE_DATA_REQUEST_SUCCESS:
       return {
-        ...data
+        ...action.data
       };
     default:
       return state;

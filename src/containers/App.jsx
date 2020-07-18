@@ -2,27 +2,24 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import isEmpty from 'lodash/isEmpty';
+import { getHomePageData } from '../actions/HomePageAction';
 
 class App extends Component {
   constructor() {
     super();
   }
-
-  static propTypes = {
-    data: PropTypes.objectOf(PropTypes.object),
-  };
-
-  static defaultProps = {
-    data: {},
-  };
   componentWillMount() {
-
+    if (isEmpty(this.props.data)) {
+      this.props.actions.getHomePageData({ tags: 'story' });
+    }
   }
   componentDidMount() {
-
+    
   }
 
   render() {
+    console.log('this.props.data', this.props.data)
     return (
       <div>
         REACT REDUX BOILERPLATEs
@@ -32,17 +29,17 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => {
-const data = state;
-return {
-data,
-};
+  return {
+    context: state.context,
+    data: state.homePageData,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-actions: bindActionCreators(
-{},
-dispatch,
-),
+  actions: bindActionCreators(
+    {getHomePageData},
+    dispatch,
+  ),
 });
 
 export default connect(

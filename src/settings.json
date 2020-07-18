@@ -1,0 +1,18 @@
+{
+    "environments": {
+        "common": {
+            "env": "dev",
+            "dev": {
+                "name": "dev",
+                "apiHosts": "hn.algolia.com/api/v1/"
+            }
+        },
+        "desktop": {},
+        "mobile": {}
+    },
+    "featureFlags": {
+        "common": {},
+        "desktop": {},
+        "mobile": {}
+    }
+}
