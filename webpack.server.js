@@ -3,12 +3,11 @@ const merge = require('webpack-merge');
 const webpackNodeExternals = require('webpack-node-externals');
 const baseConfig = require('./webpack.base.js');
 
+const webPackPlugins = [];
 const config = {
   // Inform webpack that we're building a bundle
   // for nodeJS, rather than for the browser
   target: 'node',
-
-  mode: 'production',
 
   // Tell webpack the root file of our
   // server application
@@ -22,6 +21,7 @@ const config = {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/'
   },
+  plugins: webPackPlugins,
   resolve: {
     extensions: ['.js', '.jsx'],
   },

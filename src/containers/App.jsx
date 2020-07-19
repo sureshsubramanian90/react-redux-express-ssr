@@ -3,26 +3,35 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import isEmpty from 'lodash/isEmpty';
+import classNames from 'classnames/bind';
 import { getHomePageData } from '../actions/HomePageAction';
+import * as styles from  './App.css';
 
+const cx = classNames.bind(styles);
 class App extends Component {
   constructor() {
     super();
   }
   componentWillMount() {
-    if (isEmpty(this.props.data)) {
-      this.props.actions.getHomePageData({ tags: 'story' });
-    }
+    // if (isEmpty(this.props.data)) {
+    //   this.props.actions.getHomePageData({ tags: 'story' });
+    // }
   }
   componentDidMount() {
-    
+    this.props.actions.getHomePageData({ tags: 'story' });
   }
 
   render() {
-    console.log('this.props.data', this.props.data)
+    const { data } = this.props;
     return (
-      <div>
-        REACT REDUX BOILERPLATEs
+      <div className={cx("mainContainer", "col8")}>
+        <div className={cx("test")}>REACT REDUX BOILERPLATE
+          </div>
+          {data && data.hits && data.hits.map((item) => {
+            return (
+              <p>{item.title}</p>
+            )
+          })}
       </div>
     );
   }

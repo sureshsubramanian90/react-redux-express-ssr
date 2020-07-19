@@ -1,0 +1,15 @@
+/*  Media queries for different width devices Layouts  */
+@custom-media --viewport-sm (width < 600px);
+@custom-media --viewport-sm-landscape (width < 960px) and (orientation: landscape);
+@custom-media --viewport-md (width >= 600px) and (width <= 1024px);
+@custom-media --viewport-md-landscape (min-width: 768px) and (max-width: 1024px) and (orientation: landscape);
+@custom-media --viewport-lg (width > 1024px) and (width < 1440px);
+@custom-media --viewport-pro-landscape (min-device-width: 600px) and (max-device-width: 1366px) and (orientation: landscape);
+@custom-media --viewport-xl (width >= 1440px);
+@custom-media --viewport-md-plus (width >= 600px);
+/* Medium plus screens */
+@custom-media --viewport-lg-plus (width > 1024px);
+/* Large plus screens */
+@custom-media --viewport-classic-sm (width < 768px);
+@custom-media --viewport-classic-md (width >= 768px);
+@custom-media --viewport-lg-landscape (width > 1024px) and (width < 1160px);

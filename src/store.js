@@ -3,8 +3,10 @@ import createSagaMiddleware from 'redux-saga';
 import contextReducer from './reducers/ContextReducer';
 import rootReducer from './reducers';
 import rootSagas from './sagas';
+import { getApplicationContext } from "./ContextLoader";
 
 const initialState = window.__PRELOADED_STATE__;
+const context = { context: getApplicationContext() };
 const bootReducers = {
     context: contextReducer,
     ...rootReducer

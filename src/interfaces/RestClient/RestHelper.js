@@ -11,6 +11,7 @@ import { getRequestConfig } from './RestConfig';
 const getApiUrl = (context, config) => {
     const { url, version = '' } = config;
     const { apiHosts = {}, protocol = 'https:' } = context;
+    
     return `${protocol}//${apiHosts}${url}`;
 }
 
@@ -23,6 +24,7 @@ export default class RestHelper {
         const apiUrl = getApiUrl(context, config);
         let response = {};
         const requestConfig = getRequestConfig(config, method, apiUrl);
+        
         return (axios(requestConfig)
             .then((response) => {
                 response = { ...response, isSuccess: true };

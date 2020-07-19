@@ -11,11 +11,23 @@ import RootSaga from "./sagas";
 import routes from "./routes";
 import { getApplicationContext } from "./ContextLoader";
 import StoreFactory from "./redux/storeFactory";
+import compression from 'compression';
+
 const app = Express();
 const port = 3000;
 //Serve static files
-app.use(Express.static("public"));
+app.use(compression({ filter: shouldCompress }))
 
+function shouldCompress (req, res) {
+  if (req.headers['x-no-compression']) {
+    // don't compress responses with this request header
+    return false
+  }
+
+  // fallback to standard filter function
+  return compression.filter(req, res)
+}
+app.use(Express.static("public"));
 // This is fired every time the server side receives a request
 app.use(handleRender);
 
@@ -40,7 +52,6 @@ function handleRender(req, res, next) {
             <App />
           </Provider>
         );
-        const preloadedState = store.getState();
         try {
           renderFullPage(html, store.getState());
           const tasks = store.tasks;
@@ -61,23 +72,32 @@ function handleRender(req, res, next) {
 
 function renderFullPage(html, preloadedState) {
   return `
-    <!doctype html>
-    <html>
+    <html lang="en">
       <head>
-        <base href="/" />
-        <title>Redux Universal Example</title>
+        <meta name="Description" content="React SSR Boilerplate">
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge"/>
+        <meta httpEquiv="Content-Type" content="text/html; charset=UTF-8"/>
+        <meta name="theme-color" content="#ffffff"/>
+        <meta
+            id="viewport"
+            name="viewport"
+            content="minimal-ui,width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1"
+        />
+        <link rel="shortcut icon" href="favicon.ico" />
+        <title>React Server Side</title>
       </head>
       <body>
         <div id="root">${html}</div>
         <script>
           // WARNING: See the following for security issues around embedding JSON in HTML:
           // https://redux.js.org/recipes/server-rendering/#security-considerations
-          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(
+          window.__PRELOADED_STATE__ = ${serialize(preloadedState).replace(
             /</g,
             "\\u003c"
           )}
         </script>
-        <script src="/bundle.js"></script>
+        <script src="bundle.js"></script>
+        <link rel="stylesheet" href="css/main.css" />
       </body>
     </html>
     `;
