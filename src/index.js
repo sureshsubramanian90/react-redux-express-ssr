@@ -81,7 +81,7 @@ function renderFullPage(html, preloadedState) {
         <meta
             id="viewport"
             name="viewport"
-            content="minimal-ui,width=device-width,user-scalable=no,initial-scale=1,minimum-scale=1,maximum-scale=1"
+            content="minimal-ui,width=device-width"
         />
         <link rel="shortcut icon" href="favicon.ico" />
         <title>React Server Side</title>
