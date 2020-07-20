@@ -14,18 +14,19 @@ import StoreFactory from "./redux/storeFactory";
 import compression from 'compression';
 
 const app = Express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 //Serve static files
 app.use(compression({ filter: shouldCompress }))
 
 function shouldCompress (req, res) {
-  if (req.headers['x-no-compression']) {
-    // don't compress responses with this request header
+  if (req.acceptsEncodings('gzip')
+    && (req.url.endsWith('.js') || req.url.endsWith('.css'))){
+      return compression.filter(req, res)
+    }
     return false
-  }
 
   // fallback to standard filter function
-  return compression.filter(req, res)
+  
 }
 app.use(Express.static("public"));
 // This is fired every time the server side receives a request
@@ -53,13 +54,13 @@ function handleRender(req, res, next) {
           </Provider>
         );
         try {
-          renderFullPage(html, store.getState());
+          // renderFullPage(html, store.getState());
           const tasks = store.tasks;
           store.dispatch(END);
           const pendingApiTasks = tasks.map(task => task.toPromise());
           Promise.all(pendingApiTasks).then(() => {
             // Send the rendered page back to the client
-            res.send(renderFullPage(html, store.getState()));
+            res.send(renderFullPage(html, store));
             next();
           });
         } catch (e) {
@@ -70,7 +71,12 @@ function handleRender(req, res, next) {
   );
 }
 
-function renderFullPage(html, preloadedState) {
+function renderFullPage(html, store) {
+  const ele = renderToString(
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
   return `
     <html lang="en">
       <head>
@@ -87,11 +93,11 @@ function renderFullPage(html, preloadedState) {
         <title>React Server Side</title>
       </head>
       <body>
-        <div id="root">${html}</div>
+        <div id="root">${ele}</div>
         <script>
           // WARNING: See the following for security issues around embedding JSON in HTML:
           // https://redux.js.org/recipes/server-rendering/#security-considerations
-          window.__PRELOADED_STATE__ = ${serialize(preloadedState).replace(
+          window.__PRELOADED_STATE__ = ${serialize(store.getState()).replace(
             /</g,
             "\\u003c"
           )}
